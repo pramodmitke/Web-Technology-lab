@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Management System</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            min-height: 100vh;
+            padding: 30px 20px;
+            color: #e0e0e0;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 25px;
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(90deg, #00d2ff, #3a7bd5);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: 1px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: auto;
+            background: rgba(255, 255, 255, 0.06);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+        }
+
+        .tabs {
+            display: flex;
+            background: rgba(0, 0, 0, 0.3);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .tabs button {
+            flex: 1;
+            padding: 14px;
+            border: none;
+            background: transparent;
+            color: #8a8a9a;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .tabs button:hover {
+            color: #fff;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .tabs button.active {
+            color: #fff;
+        }
+
+        .tabs button.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 20%;
+            width: 60%;
+            height: 3px;
+            background: linear-gradient(90deg, #00d2ff, #3a7bd5);
+            border-radius: 3px 3px 0 0;
+        }
+
+        .tab-content {
+            display: none;
+            padding: 28px;
+            animation: fadeIn 0.4s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #fff;
+            padding-bottom: 10px;
+            border-bottom: 2px solid rgba(0, 210, 255, 0.3);
+        }
+
+        label {
+            display: block;
+            margin-top: 12px;
+            font-weight: 500;
+            font-size: 13px;
+            color: #a0a0b8;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 10px 14px;
+            margin-top: 6px;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.06);
+            color: #e0e0e0;
+            font-size: 14px;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.3s ease;
+            outline: none;
+        }
+
+        input:focus, select:focus {
+            border-color: #3a7bd5;
+            background: rgba(58, 123, 213, 0.08);
+            box-shadow: 0 0 0 3px rgba(58, 123, 213, 0.15);
+        }
+
+        input::placeholder {
+            color: #555;
+        }
+
+        .err {
+            color: #ff6b6b;
+            font-size: 11px;
+            margin-left: 6px;
+        }
+
+        .btn {
+            margin-top: 18px;
+            padding: 11px 28px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            color: #fff;
+            font-size: 14px;
+            font-weight: 600;
+            font-family: 'Inter', sans-serif;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn-green {
+            background: linear-gradient(135deg, #00b09b, #96c93d);
+        }
+
+        .btn-blue {
+            background: linear-gradient(135deg, #3a7bd5, #00d2ff);
+        }
+
+        .btn-red {
+            background: linear-gradient(135deg, #e53935, #ff6b6b);
+        }
+
+        .btn-info {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+        }
+
+        /* Table Styles */
+        .table-wrap {
+            overflow-x: auto;
+            margin-top: 15px;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 12px 14px;
+            text-align: left;
+            font-size: 13px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        th {
+            background: rgba(58, 123, 213, 0.15);
+            color: #8ab4f8;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 11px;
+            letter-spacing: 0.8px;
+        }
+
+        tr {
+            transition: background 0.2s ease;
+        }
+
+        tr:hover {
+            background: rgba(255, 255, 255, 0.04);
+        }
+
+        td {
+            color: #c8c8d8;
+        }
+
+        /* Message Box */
+        .msg {
+            padding: 12px 20px;
+            margin: 12px 28px;
+            border-radius: 8px;
+            display: none;
+            text-align: center;
+            font-weight: 500;
+            font-size: 14px;
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .msg.success {
+            display: block;
+            background: rgba(0, 176, 155, 0.15);
+            color: #00e6c8;
+            border: 1px solid rgba(0, 176, 155, 0.3);
+        }
+
+        .msg.error {
+            display: block;
+            background: rgba(229, 57, 53, 0.15);
+            color: #ff6b6b;
+            border: 1px solid rgba(229, 57, 53, 0.3);
+        }
+
+        /* Form Grid for two columns */
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0 20px;
+        }
+
+        .form-grid .full-width {
+            grid-column: 1 / -1;
+        }
+
+        @media (max-width: 600px) {
+            .form-grid { grid-template-columns: 1fr; }
+            h1 { font-size: 1.5rem; }
+        }
+    </style>
+</head>
+
+<body>
+    <h1>&#128188; Employee Management System</h1>
+    <div class="container">
+        <div class="tabs">
+            <button class="active" onclick="showTab('add')">&#10133; Add</button>
+            <button onclick="showTab('update')">&#9998; Update</button>
+            <button onclick="showTab('delete')">&#128465; Delete</button>
+            <button onclick="showTab('view')">&#128203; View</button>
+        </div>
+        <div id="msgBox" class="msg"></div>
+
+        <!-- ADD -->
+        <div id="tab-add" class="tab-content active">
+            <h2>Add New Employee</h2>
+            <form id="addForm" onsubmit="return addEmp(event)">
+                <div class="form-grid">
+                    <div>
+                        <label>Name *</label>
+                        <input type="text" id="aName" placeholder="Enter full name"><span class="err" id="aNameErr"></span>
+                    </div>
+                    <div>
+                        <label>Email *</label>
+                        <input type="email" id="aEmail" placeholder="example@mail.com"><span class="err" id="aEmailErr"></span>
+                    </div>
+                    <div>
+                        <label>Phone</label>
+                        <input type="text" id="aPhone" placeholder="10 digit number"><span class="err" id="aPhoneErr"></span>
+                    </div>
+                    <div>
+                        <label>Department</label>
+                        <input type="text" id="aDept" placeholder="e.g. IT, HR, Finance">
+                    </div>
+                    <div>
+                        <label>Salary</label>
+                        <input type="number" id="aSalary" step="0.01" min="0" placeholder="0.00">
+                    </div>
+                    <div>
+                        <label>Registration</label>
+                        <input type="text" id="aReg" placeholder="e.g. REG001">
+                    </div>
+                    <div>
+                        <label>Address</label>
+                        <input type="text" id="aAddr" placeholder="City, State">
+                    </div>
+                    <div>
+                        <label>Gender</label>
+                        <select id="aGender">
+                            <option value="">Select Gender</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    <div class="full-width">
+                        <button type="submit" class="btn btn-green">&#10133; Add Employee</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <!-- UPDATE -->
+        <div id="tab-update" class="tab-content">
+            <h2>Update Employee</h2>
+            <form id="updForm" onsubmit="return updEmp(event)">
+                <div class="form-grid">
+                    <div class="full-width">
+                        <label>Employee ID *</label>
+                        <input type="number" id="uId" min="1" placeholder="Enter employee ID to update"><span class="err" id="uIdErr"></span>
+                    </div>
+                    <div>
+                        <label>Name *</label>
+                        <input type="text" id="uName" placeholder="New name"><span class="err" id="uNameErr"></span>
+                    </div>
+                    <div>
+                        <label>Email *</label>
+                        <input type="email" id="uEmail" placeholder="New email"><span class="err" id="uEmailErr"></span>
+                    </div>
+                    <div>
+                        <label>Phone</label>
+                        <input type="text" id="uPhone" placeholder="New phone">
+                    </div>
+                    <div>
+                        <label>Department</label>
+                        <input type="text" id="uDept" placeholder="New department">
+                    </div>
+                    <div>
+                        <label>Salary</label>
+                        <input type="number" id="uSalary" step="0.01" min="0" placeholder="New salary">
+                    </div>
+                    <div>
+                        <label>Registration</label>
+                        <input type="text" id="uReg" placeholder="New registration">
+                    </div>
+                    <div>
+                        <label>Address</label>
+                        <input type="text" id="uAddr" placeholder="New address">
+                    </div>
+                    <div>
+                        <label>Gender</label>
+                        <select id="uGender">
+                            <option value="">Select Gender</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    <div class="full-width">
+                        <button type="submit" class="btn btn-blue">&#9998; Update Employee</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <!-- DELETE -->
+        <div id="tab-delete" class="tab-content">
+            <h2>Delete Employee</h2>
+            <form id="delForm" onsubmit="return delEmp(event)">
+                <label>Employee ID *</label>
+                <input type="number" id="dId" min="1" placeholder="Enter employee ID to delete"><span class="err" id="dIdErr"></span>
+                <button type="submit" class="btn btn-red">&#128465; Delete Employee</button>
+            </form>
+            <div id="delResult"></div>
+        </div>
+
+        <!-- VIEW -->
+        <div id="tab-view" class="tab-content">
+            <h2>All Employees</h2>
+            <button class="btn btn-info" onclick="viewEmp()">&#128260; Refresh</button>
+            <div id="empTable"></div>
+        </div>
+    </div>
+
+    <script>
+        function showTab(name) {
+            var tabs = document.querySelectorAll('.tab-content');
+            var btns = document.querySelectorAll('.tabs button');
+            for (var i = 0; i < tabs.length; i++) tabs[i].classList.remove('active');
+            for (var i = 0; i < btns.length; i++) btns[i].classList.remove('active');
+            document.getElementById('tab-' + name).classList.add('active');
+            var names = ['add', 'update', 'delete', 'view'];
+            btns[names.indexOf(name)].classList.add('active');
+            if (name === 'view') viewEmp();
+        }
+
+        function showMsg(text, type) {
+            var box = document.getElementById('msgBox');
+            box.className = 'msg ' + type;
+            box.textContent = text;
+            setTimeout(function () { box.className = 'msg'; }, 3000);
+        }
+
+        function clrErr(ids) {
+            for (var i = 0; i < ids.length; i++) document.getElementById(ids[i]).textContent = '';
+        }
+
+        function validEmail(e) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e); }
+        function validPhone(p) { return /^[0-9]{10}$/.test(p); }
+
+        // ADD
+        function addEmp(e) {
+            e.preventDefault();
+            clrErr(['aNameErr', 'aEmailErr', 'aPhoneErr']);
+            var n = document.getElementById('aName').value.trim();
+            var em = document.getElementById('aEmail').value.trim();
+            var ph = document.getElementById('aPhone').value.trim();
+            var ok = true;
+            if (!n) { document.getElementById('aNameErr').textContent = 'Required'; ok = false; }
+            if (!em || !validEmail(em)) { document.getElementById('aEmailErr').textContent = 'Valid email required'; ok = false; }
+            if (ph && !validPhone(ph)) { document.getElementById('aPhoneErr').textContent = '10 digits required'; ok = false; }
+            if (!ok) return false;
+
+            var fd = new FormData();
+            fd.append('name', n); fd.append('email', em); fd.append('phone', ph);
+            fd.append('department', document.getElementById('aDept').value.trim());
+            fd.append('salary', document.getElementById('aSalary').value);
+            fd.append('registration', document.getElementById('aReg').value.trim());
+            fd.append('address', document.getElementById('aAddr').value.trim());
+            fd.append('gender', document.getElementById('aGender').value);
+
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', 'add_employee.php', true);
+            xhr.onload = function () {
+                var r = JSON.parse(xhr.responseText);
+                alert(r.message);
+                showMsg(r.message, r.status);
+                if (r.status === 'success') {
+                    document.getElementById('addForm').reset();
+                }
+            };
+            xhr.send(fd);
+            return false;
+        }
+
+        // UPDATE
+        function updEmp(e) {
+            e.preventDefault();
+            clrErr(['uIdErr', 'uNameErr', 'uEmailErr']);
+            var id = document.getElementById('uId').value;
+            var n = document.getElementById('uName').value.trim();
+            var em = document.getElementById('uEmail').value.trim();
+            var ok = true;
+            if (!id || id <= 0) { document.getElementById('uIdErr').textContent = 'Valid ID required'; ok = false; }
+            if (!n) { document.getElementById('uNameErr').textContent = 'Required'; ok = false; }
+            if (!em || !validEmail(em)) { document.getElementById('uEmailErr').textContent = 'Valid email required'; ok = false; }
+            if (!ok) return false;
+
+            var fd = new FormData();
+            fd.append('id', id); fd.append('name', n); fd.append('email', em);
+            fd.append('phone', document.getElementById('uPhone').value.trim());
+            fd.append('department', document.getElementById('uDept').value.trim());
+            fd.append('salary', document.getElementById('uSalary').value);
+            fd.append('registration', document.getElementById('uReg').value.trim());
+            fd.append('address', document.getElementById('uAddr').value.trim());
+            fd.append('gender', document.getElementById('uGender').value);
+
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', 'update_employee.php', true);
+            xhr.onload = function () {
+                var r = JSON.parse(xhr.responseText);
+                alert(r.message);
+                showMsg(r.message, r.status);
+            };
+            xhr.send(fd);
+            return false;
+        }
+
+        // DELETE
+        function delEmp(e) {
+            e.preventDefault();
+            clrErr(['dIdErr']);
+            var id = document.getElementById('dId').value;
+            if (!id || id <= 0) { document.getElementById('dIdErr').textContent = 'Valid ID required'; return false; }
+            if (!confirm('Are you sure you want to delete employee #' + id + '?')) return false;
+
+            var fd = new FormData();
+            fd.append('id', id);
+
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', 'delete_employee.php', true);
+            xhr.onload = function () {
+                var r = JSON.parse(xhr.responseText);
+                alert(r.message);
+                showMsg(r.message, r.status);
+                if (r.status === 'success') { document.getElementById('delForm').reset(); loadDelView(); }
+            };
+            xhr.send(fd);
+            return false;
+        }
+
+        function loadDelView() {
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', 'view_employees.php', true);
+            xhr.onload = function () {
+                var r = JSON.parse(xhr.responseText);
+                var d = document.getElementById('delResult');
+                if (r.data.length > 0) {
+                    var h = '<div class="table-wrap"><table><tr><th>ID</th><th>Name</th><th>Email</th><th>Phone</th><th>Dept</th><th>Salary</th><th>Reg</th><th>Address</th><th>Gender</th></tr>';
+                    for (var i = 0; i < r.data.length; i++) { var e = r.data[i]; h += '<tr><td>' + e.id + '</td><td>' + e.name + '</td><td>' + e.email + '</td><td>' + (e.phone||'-') + '</td><td>' + (e.department||'-') + '</td><td>' + (e.salary||'0') + '</td><td>' + (e.registration||'-') + '</td><td>' + (e.address||'-') + '</td><td>' + (e.gender||'-') + '</td></tr>'; }
+                    d.innerHTML = h + '</table></div>';
+                } else { d.innerHTML = '<p style="margin-top:15px;color:#8a8a9a;">No employees found.</p>'; }
+            };
+            xhr.send();
+        }
+
+        // VIEW
+        function viewEmp() {
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', 'view_employees.php', true);
+            xhr.onload = function () {
+                var r = JSON.parse(xhr.responseText);
+                var d = document.getElementById('empTable');
+                if (r.data.length > 0) {
+                    var h = '<div class="table-wrap"><table><tr><th>ID</th><th>Name</th><th>Email</th><th>Phone</th><th>Dept</th><th>Salary</th><th>Reg</th><th>Address</th><th>Gender</th></tr>';
+                    for (var i = 0; i < r.data.length; i++) { var e = r.data[i]; h += '<tr><td>' + e.id + '</td><td>' + e.name + '</td><td>' + e.email + '</td><td>' + (e.phone||'-') + '</td><td>' + (e.department||'-') + '</td><td>' + (e.salary||'0') + '</td><td>' + (e.registration||'-') + '</td><td>' + (e.address||'-') + '</td><td>' + (e.gender||'-') + '</td></tr>'; }
+                    d.innerHTML = h + '</table></div>';
+                } else { d.innerHTML = '<p style="margin-top:15px;color:#8a8a9a;">No employees found.</p>'; }
+            };
+            xhr.send();
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>TechMobile - Interactive Billing</title>
+
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fd;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header Styles */
+        .header {
+            background-color: #2d3436;
+            color: white;
+            padding: 15px 0;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        .logo h1 {
+            margin: 0;
+            font-size: 24px;
+            color: #6c5ce7;
+        }
+
+        .nav-bar {
+            display: flex;
+            gap: 20px;
+        }
+
+        .nav-bar a {
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+            padding: 8px 15px;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+
+        .nav-bar a:hover {
+            background-color: #6c5ce7;
+        }
+
+        .section {
+            background-color: white;
+            margin: 20px 0;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            transition: transform 0.2s;
+        }
+
+        /* Table Styles */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        table,
+        th,
+        td {
+            border: 1px solid #e0e0e0;
+        }
+
+        th,
+        td {
+            padding: 15px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #6c5ce7;
+            color: white;
+        }
+
+        tr {
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        tr:hover {
+            background-color: #ececfd;
+        }
+
+        /* Form Styles */
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"],
+        input[type="number"],
+        select {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+            /* Fixes padding issues */
+        }
+
+        input:focus,
+        select:focus {
+            border-color: #6c5ce7;
+            outline: none;
+            box-shadow: 0 0 5px rgba(108, 92, 231, 0.3);
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        button {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background-color: #6c5ce7;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #5b4cc4;
+            transform: translateY(-2px);
+        }
+
+        .btn-reset {
+            background-color: #e74c3c;
+            color: white;
+        }
+
+        .btn-reset:hover {
+            background-color: #c0392b;
+        }
+
+        .product-img {
+            width: 60px;
+            height: 60px;
+            object-fit: contain;
+            border-radius: 4px;
+        }
+
+        /* Live Calculation Box */
+        .total-display {
+            background-color: #f8f9fa;
+            border-left: 5px solid #6c5ce7;
+            padding: 15px;
+            margin-top: 20px;
+            font-size: 1.2em;
+        }
+
+        .total-display span {
+            font-weight: bold;
+            color: #2c3e50;
+            font-size: 1.5em;
+        }
+
+        /* Search Bar */
+        #searchBar {
+            padding: 12px;
+            width: 100%;
+            max-width: 300px;
+            margin-bottom: 15px;
+            border: 2px solid #ddd;
+            border-radius: 20px;
+            padding-left: 20px;
+        }
+
+        /* Modal / Invoice Popup */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(3px);
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 0;
+            border: 1px solid #888;
+            width: 500px;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            animation: slideIn 0.3s;
+        }
+
+        @keyframes slideIn {
+            from {
+                top: -100px;
+                opacity: 0
+            }
+
+            to {
+                top: 5%;
+                opacity: 1
+            }
+        }
+
+        .invoice-header {
+            background-color: #2d3436;
+            color: white;
+            padding: 20px;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+            text-align: center;
+        }
+
+        .invoice-body {
+            padding: 30px;
+        }
+
+        .invoice-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            border-bottom: 1px dashed #eee;
+            padding-bottom: 10px;
+        }
+
+        .invoice-total {
+            font-size: 1.4em;
+            color: #6c5ce7;
+            font-weight: bold;
+            border-top: 2px solid #ddd;
+            padding-top: 15px;
+            margin-top: 15px;
+            text-align: right;
+        }
+
+        .close-btn {
+            background-color: #7f8c8d;
+            margin-top: 20px;
+            width: 100%;
+        }
+
+        /* Banner */
+        .banner {
+            height: 200px;
+            background: linear-gradient(135deg, #6c5ce7 0%, #a29bfe 100%);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="header">
+        <div class="header-container">
+            <div class="logo">
+                <h1>📱 TechMobile</h1>
+            </div>
+            <nav class="nav-bar">
+                <a href="#home">Home</a>
+                <a href="#products">Products</a>
+                <a href="#billing">Billing</a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container">
+
+        <div class="banner">
+            <h2>⚡ Super Sale is Live! Get 20% Off on Accessories ⚡</h2>
+        </div>
+
+        <div class="section" id="products">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
+                <h2>Available Products</h2>
+                <input type="text" id="searchBar" placeholder="🔍 Search phones...">
+            </div>
+            <p><i>Tip: Click on any row to add it to the bill automatically.</i></p>
+
+            <table id="productTable">
+                <thead>
+                    <tr>
+                        <th>Image</th>
+                        <th>Product Name</th>
+                        <th>Brand</th>
+                        <th>Price (₹)</th>
+                        <th>Stock</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><img src="assets/galaxy_s23.png" class="product-img" alt="Galaxy S23"></td>
+                        <td>Galaxy S23</td>
+                        <td>Samsung</td>
+                        <td>74,999</td>
+                        <td><span style="color: green;">In Stock</span></td>
+                    </tr>
+                    <tr>
+                        <td><img src="assets/iphone_14.png" class="product-img" alt="iPhone 14"></td>
+                        <td>iPhone 14</td>
+                        <td>Apple</td>
+                        <td>79,999</td>
+                        <td><span style="color: green;">In Stock</span></td>
+                    </tr>
+                    <tr>
+                        <td><img src="assets/oneplus_11.png" class="product-img" alt="OnePlus 11"></td>
+                        <td>OnePlus 11</td>
+                        <td>OnePlus</td>
+                        <td>56,999</td>
+                        <td><span style="color: green;">In Stock</span></td>
+                    </tr>
+                    <tr>
+                        <td><img src="assets/pixel_7_pro.png" class="product-img" alt="Pixel 7 Pro"></td>
+                        <td>Pixel 7 Pro</td>
+                        <td>Google</td>
+                        <td>84,999</td>
+                        <td><span style="color: orange;">Low Stock</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="section" id="billing">
+            <h2>🧾 Customer Billing Form</h2>
+            <form id="billingForm">
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <div>
+                        <h3>Customer Details</h3>
+                        <label for="custName">Full Name:*</label>
+                        <input type="text" id="custName" required placeholder="Abhishek Shelke">
+
+                        <label for="custPhone">Phone Number:*</label>
+                        <input type="tel" id="custPhone" required placeholder="9876543210" pattern="[0-9]{10}">
+
+                        <label for="custEmail">Email:</label>
+                        <input type="email" id="custEmail" placeholder="john@example.com">
+                    </div>
+
+                    <div>
+                        <h3>Order Details</h3>
+                        <label for="product">Select Product:*</label>
+                        <select id="product" required>
+                            <option value="" data-price="0">-- Choose a Product --</option>
+                            <option value="Galaxy S23" data-price="74999">Galaxy S23 - ₹74,999</option>
+                            <option value="iPhone 14" data-price="79999">iPhone 14 - ₹79,999</option>
+                            <option value="OnePlus 11" data-price="56999">OnePlus 11 - ₹56,999</option>
+                            <option value="Pixel 7 Pro" data-price="84999">Pixel 7 Pro - ₹84,999</option>
+                        </select>
+
+                        <label for="quantity">Quantity:</label>
+                        <input type="number" id="quantity" value="1" min="1">
+
+                        <label for="payment">Payment Method:</label>
+                        <select id="payment">
+                            <option value="Cash">Cash</option>
+                            <option value="Card">Credit/Debit Card</option>
+                            <option value="UPI">UPI</option>
+                            <option value="EMI">EMI</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="total-display">
+                    Grand Total: <span id="displayTotal">₹0</span>
+                </div>
+
+                <div class="btn-group">
+                    <button type="submit" class="btn-primary">Generate Invoice</button>
+                    <button type="button" class="btn-reset">Reset</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="section"
+            style="background-color: #34495e; color: white; text-align: center; padding: 30px; border-radius: 8px;">
+            <h3 style="margin: 0 0 15px 0; color: #ecf0f1;">📱 TechMobile Store</h3>
+            <p style="margin: 5px 0;">📍 TechMobile Store near Sanjivani College , kopargaon 423401</p>
+            <p style="margin: 5px 0;">📞 Contact: +91-9876543210 | +91-8765432109</p>
+            <p style="margin: 5px 0;">✉️ Email: support@techmobile.in</p>
+            <p style="margin: 15px 0 5px 0; font-size: 14px; color: #bdc3c7;">Store Manager: <strong>Abhishek Shelke</strong></p>
+            <p style="margin: 5px 0; font-size: 14px; color: #bdc3c7;">Sales Head: <strong>Kunal Vadkte</strong></p>
+            <p style="margin: 15px 0 0 0; font-size: 12px; color: #95a5a6;">© 2026 TechMobile Store. All Rights
+                Reserved.</p>
+        </div>
+
+    </div>
+
+    <div id="invoiceModal" class="modal">
+        <div class="modal-content">
+            <div class="invoice-header">
+                <h2>✅ Invoice Generated</h2>
+                <p>TechMobile Store</p>
+            </div>
+            <div class="invoice-body">
+                <div class="invoice-row">
+                    <span><strong>Customer:</strong></span>
+                    <span id="invName"></span>
+                </div>
+                <div class="invoice-row">
+                    <span><strong>Date:</strong></span>
+                    <span id="invDate"></span>
+                </div>
+                <hr>
+                <div class="invoice-row">
+                    <span><strong>Product:</strong></span>
+                    <span id="invProduct"></span>
+                </div>
+                <div class="invoice-row">
+                    <span><strong>Quantity:</strong></span>
+                    <span id="invQty"></span>
+                </div>
+                <div class="invoice-row">
+                    <span><strong>Price/Unit:</strong></span>
+                    <span id="invPrice"></span>
+                </div>
+                <div class="invoice-row">
+                    <span><strong>Payment Mode:</strong></span>
+                    <span id="invPayment"></span>
+                </div>
+                <div class="invoice-total">
+                    Total: <span id="invTotal"></span>
+                </div>
+
+                <button class="close-btn">Close & Print</button>
+            </div>
+        </div>
+    </div>
+
+
+
+</body>
+
+</html>

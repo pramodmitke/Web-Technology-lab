@@ -1,0 +1,70 @@
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] ----------------< com.college:employee-task-management >----------------
+[INFO] Building employee-task-management 1.0.0
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- clean:3.3.2:clean (default-clean) @ employee-task-management ---
+[INFO] Deleting E:\TY LABS SCOE\WTL\Assignment 11\target
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ employee-task-management ---
+[INFO] Copying 1 resource from src\main\resources to target\classes
+[INFO] Copying 0 resource from src\main\resources to target\classes
+[INFO] 
+[INFO] --- compiler:3.13.0:compile (default-compile) @ employee-task-management ---
+[INFO] Recompiling the module because of changed source code.
+[INFO] Compiling 4 source files with javac [debug parameters release 17] to target\classes
+[INFO] 
+[INFO] --- resources:3.3.1:testResources (default-testResources) @ employee-task-management ---
+[INFO] skip non existing resourceDirectory E:\TY LABS SCOE\WTL\Assignment 11\src\test\resources
+[INFO] 
+[INFO] --- compiler:3.13.0:testCompile (default-testCompile) @ employee-task-management ---
+[INFO] Recompiling the module because of changed dependency.
+[INFO] Compiling 1 source file with javac [debug parameters release 17] to target\test-classes
+[INFO] 
+[INFO] --- surefire:3.2.5:test (default-test) @ employee-task-management ---
+[INFO] Using auto detected provider org.apache.maven.surefire.junitplatform.JUnitPlatformProvider
+[INFO] 
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running com.college.etms.EmployeeTaskManagementApplicationTests
+10:54:19.648 [main] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [com.college.etms.EmployeeTaskManagementApplicationTests]: EmployeeTaskManagementApplicationTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+10:54:19.819 [main] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration com.college.etms.EmployeeTaskManagementApplication for test class com.college.etms.EmployeeTaskManagementApplicationTests
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v3.3.5)
+
+2026-04-20T10:54:20.804+05:30  INFO 14148 --- [employee-task-management] [           main] e.EmployeeTaskManagementApplicationTests : Starting EmployeeTaskManagementApplicationTests using Java 26 with PID 14148 (started by Abhi in E:\TY LABS SCOE\WTL\Assignment 11)
+2026-04-20T10:54:20.807+05:30  INFO 14148 --- [employee-task-management] [           main] e.EmployeeTaskManagementApplicationTests : No active profile set, falling back to 1 default profile: "default"
+WARNING: A restricted method in java.lang.System has been called
+WARNING: java.lang.System::load has been called by org.apache.tomcat.jni.Library in an unnamed module (file:/C:/Users/User/.m2/repository/org/apache/tomcat/embed/tomcat-embed-core/10.1.31/tomcat-embed-core-10.1.31.jar)
+WARNING: Use --enable-native-access=ALL-UNNAMED to avoid a warning for callers in this module
+WARNING: Restricted methods will be blocked in a future release unless native access is enabled
+
+2026-04-20T10:54:22.542+05:30  INFO 14148 --- [employee-task-management] [           main] e.EmployeeTaskManagementApplicationTests : Started EmployeeTaskManagementApplicationTests in 2.096 seconds (process running for 3.83)
+WARNING: A Java agent has been loaded dynamically (C:\Users\User\.m2\repository\net\bytebuddy\byte-buddy-agent\1.14.19\byte-buddy-agent-1.14.19.jar)
+WARNING: If a serviceability tool is in use, please run with -XX:+EnableDynamicAgentLoading to hide this warning
+WARNING: If a serviceability tool is not in use, please run with -Djdk.instrument.traceUsage for more information
+WARNING: Dynamic loading of agents will be disallowed by default in a future release
+Java HotSpot(TM) 64-Bit Server VM warning: Sharing is only supported for boot loader classes because bootstrap classpath has been appended
+Context loads test executed successfully!
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 3.904 s -- in com.college.etms.EmployeeTaskManagementApplicationTests
+[INFO] 
+[INFO] Results:
+[INFO] 
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0
+[INFO] 
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  9.021 s
+[INFO] Finished at: 2026-04-20T10:54:23+05:30
+[INFO] ------------------------------------------------------------------------

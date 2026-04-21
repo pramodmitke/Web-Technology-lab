@@ -1,0 +1,104 @@
+<html>
+
+<head>
+    <title>Assignment 3 - Registration Form</title>
+</head>
+
+<body>
+
+    <h2>Registration Form</h2>
+
+    <form name="regForm" onsubmit="return validateForm()">
+
+        Name: <input type="text" id="name"><br><br>
+
+        Email: <input type="text" id="email"><br><br>
+
+        Phone: <input type="text" id="phone"><br><br>
+
+        Password: <input type="password" id="password"><br><br>
+
+        Confirm Password: <input type="password" id="cpassword"><br><br>
+
+        Gender:
+        <input type="radio" name="gender" value="Male"> Male
+        <input type="radio" name="gender" value="Female"> Female
+        <br><br>
+
+        <button type="submit">Register</button>
+        <button type="reset">Reset</button>
+
+    </form>
+
+    <p id="msg"></p>
+
+    <hr>
+
+    <h3><a href="addition.html">Go to Addition</a></h3>
+
+    <script>
+        function validateForm() {
+            var name = document.getElementById("name").value;
+            var email = document.getElementById("email").value;
+            var phone = document.getElementById("phone").value;
+            var password = document.getElementById("password").value;
+            var cpassword = document.getElementById("cpassword").value;
+            var gender = document.querySelector('input[name="gender"]:checked');
+
+            // Name validation
+            if (name == "") {
+                alert("Name is required");
+                return false;
+            }
+
+            // Email validation
+            if (email == "") {
+                alert("Email is required");
+                return false;
+            }
+            if (email.indexOf("@") == -1 || email.indexOf(".") == -1) {
+                alert("Enter a valid email");
+                return false;
+            }
+
+            // Phone validation
+            if (phone == "") {
+                alert("Phone number is required");
+                return false;
+            }
+            if (phone.length != 10 || isNaN(phone)) {
+                alert("Enter a valid 10-digit phone number");
+                return false;
+            }
+
+            // Password validation
+            if (password == "") {
+                alert("Password is required");
+                return false;
+            }
+            if (password.length < 6) {
+                alert("Password must be at least 6 characters");
+                return false;
+            }
+
+            // Confirm password validation
+            if (cpassword != password) {
+                alert("Passwords do not match");
+                return false;
+            }
+
+            // Gender validation
+            if (gender == null) {
+                alert("Please select gender");
+                return false;
+            }
+
+            document.getElementById("msg").innerHTML = "Registration Successful!";
+            alert("Registration Successful!");
+            return false;
+        }
+    </script>
+
+</body>
+
+</html>
